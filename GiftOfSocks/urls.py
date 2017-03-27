@@ -15,11 +15,14 @@ Including another URLconf
 """
 from django.conf.urls import *
 from django.contrib import admin
-from form.views import user_form, admin_form
+from form.views import user_form, admin_form, user, admin_test, admin_query
 admin.autodiscover()
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^user_form/$',user_form, name='user_form'),
-    url(r'^admin_form/$',admin_form, name='admin_form')
+    url(r'^admin_form/$',admin_form, name='admin_form'),
+    url(r'^user/$',user, name='user'),
+    url(r'^admin_test/$',admin_test, name='admin_test'),
+    url(r'^admin_query/$',admin_query, name='admin_query')
 ]

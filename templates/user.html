@@ -1,9 +1,21 @@
-<div align="center">
+<!--Test template for demo -->
+
+<div align="left">
     <tr>
         <form method="POST"> 
             {% csrf_token %} 
-            <h5>Buyer:</h5>
+            <h5>Order:</h5>
             {{ form.as_p }}
+            <ul>
+    			<li>
+        			{{ Sock.objects.0 }}
+        			ESU Colors - Medium - Men (6-8) Donation $20
+    			</li>
+    			<li>
+        			{{ Sock.objects.1 }}
+        			ESU Colors - Large - Men (9-13) Donation $20 
+    			</li>
+			</ul>
             <input type="submit" value="submit">
         </form>
     </tr>

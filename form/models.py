@@ -47,7 +47,14 @@ class BuyerDeliveryInfo(models.Model):
 	building_name = models.CharField(max_length=30)
 	room_number = models.CharField(max_length=10)
 
+# Test model for demo purposes. Remove and drop from GOSDB
+class OrderTest(models.Model):
+	order_id = models.AutoField('order')
+	order_id.primary_key = True
+	sock_id = models.ForeignKey('Sock')
 
+
+# Not sure if needed, should investigate
 class Meta:
 	db_table=u'Buyer'
 
