@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from django import forms
 from .forms import OrderTestForm
+from .forms import socksForm
+from .forms import BuyerForm
 from .models import Sock
 from .models import OrderTest
 
@@ -12,27 +14,24 @@ def admin_form(request):
 
 #def user(request):
 #	if request.method == "POST":
-#		form = OrderTestForm(request.POST)
+#		form = BuyerForm(request.POST)
 #		if form.is_valid():
 #			model_instance = sock.save(commit=False)
 #			model_instance.save()
-#			return redirect('user_form.html')
+#			return redirect('user.html')
 #	else:
-#		form = OrderTestForm()
+#		form = BuyerForm()
 #	return render(request, "user.html", {'form':form})
 
 # Test view for demo
 def user(request):
-	if request.method == "POST":
-		#sock = Sock(request.POST['sock_id'])
-		form = OrderTestForm(request.POST)
-		#form.sock_id = sock
-		if form.is_valid():
-			model_instance = form.save(commit=False)
-			model_instance.save()
-			return redirect('user_form.html')
+	form = socksForm(request.POST)
+	if form.is_valid():
+		model_instance = form.save(commit=False)
+		model_instance.save()
+		return render(request, "user.html", {'form':form})
 	else:
-		form = OrderTestForm()
+		form = socksForm()
 	return render(request, "user.html", {'form':form})
 
 # Test view for demo
