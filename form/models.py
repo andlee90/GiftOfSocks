@@ -1,4 +1,5 @@
 from django.db import models
+from GiftOfSocks.choices import *
 
 class Buyer(models.Model):
 	buyer_id = models.AutoField('buyer')
@@ -6,9 +7,9 @@ class Buyer(models.Model):
 	first_name = models.CharField(max_length=30)
 	last_name = models.CharField(max_length=40)
 	email = models.EmailField()
-	areacode = models.IntegerField(max_length=3)
-	exchange = models.IntegerField(max_length=3)
-	extension = models.IntegerField(max_length=4)
+	areacode = models.IntegerField()
+	exchange = models.IntegerField()
+	extension = models.IntegerField()
 
 class Sock(models.Model):
 	sock_id = models.AutoField('sock')
@@ -51,8 +52,25 @@ class BuyerDeliveryInfo(models.Model):
 class OrderTest(models.Model):
 	order_id = models.AutoField('order')
 	order_id.primary_key = True
-	sock_id = models.ForeignKey('Sock')
+	sock_id = models.IntegerField()
+	sock_id.foreign_key = True
 
+#comprehsnive fall back option if we cant get formset to work
+class Comprehensive(models.Model):
+	order_id = models.AutoField('order')
+	order_id.primary_key = True
+	first_name = models.CharField(max_length=30)
+	last_name = models.CharField(max_length=40)
+	email = models.EmailField()
+	areacode = models.CharField(max_length=3)
+	exchange = models.CharField(max_length=3)
+	extension = models.CharField(max_length=4)
+	sock_id = models.IntegerField(choices= choices, default=0)
+	charity_id = models.IntegerField(choices= choices2, default=0)
+	role_id = models.IntegerField(choices= choices3, default=0)
+	delivery_id = models.IntegerField(choices= choices4, default=0)
+	building_name = models.CharField(max_length=30)
+	room_number = models.CharField(max_length=3)
 
 # Not sure if needed, should investigate
 class Meta:
