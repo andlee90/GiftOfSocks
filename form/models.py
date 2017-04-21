@@ -1,15 +1,6 @@
 from django.db import models
 from GiftOfSocks.choices import *
-
-class Buyer(models.Model):
-	buyer_id = models.AutoField('buyer')
-	buyer_id.primary_key = True
-	first_name = models.CharField(max_length=30)
-	last_name = models.CharField(max_length=40)
-	email = models.EmailField()
-	areacode = models.IntegerField()
-	exchange = models.IntegerField()
-	extension = models.IntegerField()
+from django.core.validators import RegexValidator
 
 class Sock(models.Model):
 	sock_id = models.AutoField('sock')
@@ -31,51 +22,45 @@ class Delivery(models.Model):
 	delivery_id.primary_key = True
 	delivery_option = models.CharField(max_length=30)
 
+class Buyer(models.Model):
+	buyer_id = models.AutoField('buyer')
+	buyer_id.primary_key = True
+	first_name = models.CharField(max_length=30)
+	last_name = models.CharField(max_length=40)
+	email = models.EmailField()
+	phone_regex = RegexValidator(regex=r'^\+?1?\d{10,10}$', message="Phone number must be entered in the format: '+999999999'. 10 digits allowed.")
+	phone_number = models.CharField(validators=[phone_regex], blank=True, max_length=10)
+
 class BuyerRole(models.Model):
-	buyer_id = models.ForeignKey('buyer')
-	role_id = models.ForeignKey('role')
+	buyer_id = models.IntegerField(default=0)
+	role_id = models.IntegerField(default=0)
+
+class BuyerDeliveryInfo(models.Model):
+	buyer_id = models.IntegerField()
+	building_name = models.CharField(max_length=30)
+	room_number = models.CharField(max_length=10)
 
 class Order(models.Model):
 	order_id = models.AutoField('order')
 	order_id.primary_key = True
-	buyer_id = models.ForeignKey('buyer')
-	sock_id = models.ForeignKey('Sock')
-	charity_id = models.ForeignKey('charity')
-	delivery_id = models.ForeignKey('delivery')
+	buyer_id = models.IntegerField(default=0)
+	sock_id = models.IntegerField(default=0)
+	charity_id = models.IntegerField(default=0)
+	delivery_id = models.IntegerField(default=0)
 	
-class BuyerDeliveryInfo(models.Model):
-	buyer_id = models.ForeignKey('buyer')
-	building_name = models.CharField(max_length=30)
-	room_number = models.CharField(max_length=10)
-
-# Test model for demo purposes. Remove and drop from GOSDB
-class OrderTest(models.Model):
-	order_id = models.AutoField('order')
-	order_id.primary_key = True
-	sock_id = models.IntegerField()
-	sock_id.foreign_key = True
-
 #comprehsnive fall back option if we cant get formset to work
 class Comprehensive(models.Model):
-	order_id = models.AutoField('order')
+	order_id = models.AutoField('Order')
 	order_id.primary_key = True
 	first_name = models.CharField(max_length=30)
 	last_name = models.CharField(max_length=40)
 	email = models.EmailField()
-	areacode = models.CharField(max_length=3)
-	exchange = models.CharField(max_length=3)
-	extension = models.CharField(max_length=4)
-	sock_id = models.IntegerField(choices= choices, default=0)
-	charity_id = models.IntegerField(choices= choices2, default=0)
-	role_id = models.IntegerField(choices= choices3, default=0)
-	delivery_id = models.IntegerField(choices= choices4, default=0)
-	building_name = models.CharField(max_length=30)
-	room_number = models.CharField(max_length=3)
-
-# Not sure if needed, should investigate
-class Meta:
-	db_table=u'Buyer'
-
-	def __unicode__(self):
-		return u"%d %s %s %s %d" % (self.pk, self.first_name, self.last_name, self.email,self.phone)
+	phone_regex = RegexValidator(regex=r'^\+?1?\d{10,10}$', message="Phone number must be entered in the format: '+999999999'. 10 digits allowed.")
+	phone_number = models.CharField(validators=[phone_regex], blank=True, max_length=10) # validators should be a list
+	sock_id = models.IntegerField(choices= choices, default=0, verbose_name='Sock Choice')
+	charity_id = models.IntegerField(choices= choices2, default=0, verbose_name='Chairty')
+	role_id = models.IntegerField(choices= choices3, default=0, verbose_name='Role')
+	delivery_id = models.IntegerField(choices= choices4, default=0, verbose_name='Delivery Option')
+	building_name = models.CharField(max_length=30,null=True, blank=True)
+	room_number = models.CharField(max_length=3,null=True, blank=True)
 

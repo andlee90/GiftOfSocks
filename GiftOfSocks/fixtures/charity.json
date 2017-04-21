@@ -1,0 +1,17 @@
+[
+	{
+		"model": "GiftOfSocks.form.Charity",
+		  "pk": 1,
+		  "fields":{
+		  "charity_name": "Student"},
+	},
+	{
+
+		"model": "GiftOfSocks.form.Charity",
+		  "pk": 2,
+		  "fields":{
+		  "charity_name": "The Good Project"}
+	}
+]
+
+

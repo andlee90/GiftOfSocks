@@ -1,13 +1,10 @@
 from django.shortcuts import render, redirect
 from django import forms
 
-from .forms import OrderTestForm
-from .forms import socksForm
-from .forms import BuyerForm
+from .forms import OrderForm
 
-from .models import Sock
-from .models import OrderTest
-from .models import Comprehensive
+from .models import *
+
 
 def user_form(request):
 	return render(request, 'user_form.html')
@@ -26,19 +23,78 @@ def admin_form(request):
 #		form = BuyerForm()
 #	return render(request, "user.html", {'form':form})
 
-#Testing comprehensive table view/db interaction
+#Working comprehensive table view/db interaction
+#def user(request):
+#	if request.POST:		
+#		form = OrderTestForm(request.POST)
+#		if form.is_valid():
+#			form.save(commit=False)
+#			form.save()
+#			form = OrderTestForm()
+#			return render(request, "user.html", {'form':form})
+#	else:
+#		form = OrderTestForm()
+#	return render(request, "user.html", {'form':form})
+
+#Testing saving data to other models for our DB design
 def user(request):
-	if request.POST:		
-		form = OrderTestForm(request.POST)
+	if request.POST:	
+		form = OrderForm(request.POST)
+		buyer = Buyer()
+		buyerRole = BuyerRole()
+		order = Order()
+		buyerDelInfo = BuyerDeliveryInfo()
 		if form.is_valid():
-			form.save(commit=False)
-			form.save()
-			form = OrderTestForm()
+			data = form.cleaned_data
+			if Buyer.objects.all().filter(email = data['email']).exists() == False:
+				buyer.first_name = data['first_name']
+				buyer.last_name = data['last_name']
+				buyer.email = data['email']
+				buyer.phone_number = data['phone_number']
+				buyer.save()
+				buyerRole.buyer_id = buyer.buyer_id
+				buyerRole.role_id = data['role_id']
+				buyerRole.save()
+				if data['delivery_id'] == 2:
+					buyerDelInfo.buyer_id = buyer.buyer_id
+					buyerDelInfo.building_name = data['building_name']
+					buyerDelInfo.room_number = data['room_number']
+					buyerDelInfo.save()
+				order.buyer_id = buyer.buyer_id
+				order.sock_id = data['sock_id']
+				order.charity_id = data['charity_id']
+				order.delivery_id = data['delivery_id']
+				order.save()
+				form.save()
+			else:
+				existing_info = Buyer.objects.all().filter(email = data['email'])
+				print existing_info
+				existing_buyer_id = existing_info.values_list('buyer_id', flat = True)
+				print existing_buyer_id
+				#These return querysets for the correct buyer instance. 
+				#Cant parse it to retrieve the value. 
+				#Could maybe go back to foreign keys using this as a template.
+				#They technically return instances of models, could work I guess...
+				#Find the buyer's id because it exists and use that to populate other tables
+				buyerRole.buyer_id = existing_buyer_id #Here
+				buyerRole.role_id = data['role_id']
+				buyerRole.save()
+				if data['delivery_id'] == 2:
+					buyerDelInfo.buyer_id = existing_buyer_id #Here
+					buyerDelInfo.building_name = data['building_name']
+					buyerDelInfo.room_number = data['room_number']
+					buyerDelInfo.save()
+				order.buyer_id = existing_buyer_id #Here
+				order.sock_id = data['sock_id']
+				order.charity_id = data['charity_id']
+				order.delivery_id = data['delivery_id']
+				order.save()
+				form.save()
+			form = OrderForm()
 			return render(request, "user.html", {'form':form})
 	else:
-		form = OrderTestForm()
+		form = OrderForm()
 	return render(request, "user.html", {'form':form})
-
 
 # Test view for demo
 def admin_query(request):
@@ -48,3 +104,4 @@ def admin_query(request):
 # Test view for demo
 def admin_test(request):
 	return render(request, 'admin_query.html')
+

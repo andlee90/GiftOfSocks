@@ -1,0 +1,39 @@
+[
+	{
+		"model": "GiftOfSocks.form.Role",
+		  "pk": 1,
+		  "fields":{
+		  "role_name": "Student"}
+	},
+	{
+		"model": "GiftOfSocks.form.Role",
+		  "pk": 2,
+		  "fields":{
+		  "role_name": "Community Member"}
+	},
+	{
+		"model": "GiftOfSocks.form.Role",
+		  "pk": 3,
+		  "fields":{
+		  "role_name": "Staff"}
+	},
+	{
+		"model": "GiftOfSocks.form.Role",
+		  "pk": 4,
+		  "fields":{
+		  "role_name": "Faculty"}
+	},
+	{
+		"model": "GiftOfSocks.form.Role",
+		  "pk": 5,
+		  "fields":{
+		  "role_name": "Administrator"}
+	},
+	{
+		"model": "GiftOfSocks.form.Role",
+		  "pk": 6,
+		  "fields":{
+		  "role_name": "Alumni"}
+	}
+
+]

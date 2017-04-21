@@ -1,0 +1,58 @@
+[
+	{
+	  "model": "GiftOfSocks.form.Sock",
+	  "pk": 1,
+	  "fields":{
+	    "sock_type": "ESU Colors - Medium - Men (6-8) Donation $20"}
+	},
+
+	{
+
+	  "model": "GiftOfSocks.form.Sock",
+	  "pk": 2,
+	  "fields":{
+	    "sock_type": "ESU Colors - Large - Men (9-13) Donation $20"}
+	},
+
+	{
+	  "model": "GiftOfSocks.form.Sock",
+	  "pk": 3,
+	  "fields":{
+	    "sock_type": "Neon Colors - Medium - Men (6-8) Donation $20"}
+	},
+
+	{
+	  "model": "GiftOfSocks.form.Sock",
+	  "pk": 4,
+	  "fields":{
+	    "sock_type": "Neon Colors - Large - Men (6-8) Donation $20"}
+	},
+
+	{
+	  "model": "GiftOfSocks.form.Sock",
+	  "pk": 5,
+	  "fields":{
+	    "sock_type": "ESU Colors - Medium - Women (6-9) Donation $20"}
+	},
+
+	{
+	  "model": "GiftOfSocks.form.Sock",
+	  "pk": 6,
+	  "fields":{
+	    "sock_type": "ESU Colors - Large - Women (10-13) Donation $20"}
+	},
+
+	{
+	  "model": "GiftOfSocks.form.Sock",
+	  "pk": 7,
+	  "fields":{
+	    "sock_type": "Neon Colors - Medium - Women (6-9) Donation $20"}
+	},
+
+	{
+	  "model": "GiftOfSocks.form.Sock",
+	  "pk": 8,
+	  "fields":{
+	    "sock_type": "Neon Colors - Large - Women (10-13) Donation $20"}
+	}
+]

@@ -1,0 +1,18 @@
+[
+	{
+		"model": "GiftOfSocks.form.Delivery",
+		  "pk": 1,
+		  "fields":{
+		  "delivery_option": "Pick Up"},
+	},
+	{
+
+		"model": "GiftOfSocks.form.Delivery",
+		  "pk": 2,
+		  "fields":{
+		  "delivery_option": "Delivery"}
+
+	}
+]
+
+
