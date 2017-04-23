@@ -1,0 +1,10 @@
+delete from form_comprehensive;
+alter table form_comprehensive auto_increment = 1;
+delete from form_buyer;
+alter table form_buyer auto_increment = 1;
+delete from form_buyerrole;
+alter table form_buyerrole auto_increment = 1;
+delete from form_order;
+alter table form_order auto_increment = 1;
+delete from form_buyerdeliveryinfo;
+alter table form_buyerdeliveryinfo auto_increment = 1;
