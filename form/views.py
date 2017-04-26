@@ -1,10 +1,7 @@
 from django.shortcuts import render, redirect
 from django import forms
-
 from .forms import OrderForm
-
 from .models import *
-
 
 def user_form(request):
 	return render(request, 'user_form.html')
@@ -85,12 +82,26 @@ def user(request):
 		form = OrderForm()
 	return render(request, "user.html", {'form':form})
 
-# Test view for demo
-def admin_query(request):
-	socks = OrderTest.objects.count()
-	return render(request, 'admin_query.html', {'socks': socks})
+def admin_shell(request):
+	if request.method == 'POST' and 'total_socks' in request.POST:
+		socks = Order.objects.count()
+		return render(request, 'admin_shell.html', {'socks': socks})
+	elif request.method == 'POST' and 'total_socks_charity' in request.POST:
+		charities = Charity.objects.all()
+		charities_list = charities.values_list("charity_name", flat=True)
+		charity1_orders = Order.objects.filter(charity_id_id = 1).count()
+		charity2_orders = Order.objects.filter(charity_id_id = 2).count()
+		charity1 = charities_list[0]
+		charity2 = charities_list[1]
+		charity1 += ": " + str(charity1_orders)
+		charity2 += ": " + str(charity2_orders)
+		return render(request, 'admin_shell.html', {'charity1': charity1, 'charity2': charity2})
+	elif request.method == 'POST' and 'total_socks_large' in request.POST:
+		large_socks2 = Order.objects.filter(sock_id_id = 2).count()
+		large_socks4 = Order.objects.filter(sock_id_id = 4).count()
+		large_socks6 = Order.objects.filter(sock_id_id = 6).count()
+		large_socks = large_socks2 + large_socks4 + large_socks6
+		return render(request, 'admin_shell.html', {'large_socks': large_socks})
+	
 
-# Test view for demo
-def admin_test(request):
-	return render(request, 'admin_query.html')
 

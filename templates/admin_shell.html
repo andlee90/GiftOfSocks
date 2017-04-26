@@ -1,0 +1,46 @@
+<!--Test template for demo -->
+
+{% extends "base.html" %}
+
+{%block content %}
+
+	<html>
+		<body>
+			<img src="/static/media/esu_logo_header.png" alt="ESU Logo" /><br><br>
+			<font size="4">Select from the following to generate a query:</font><br>
+			<form method="POST"> 
+				{% csrf_token %} 
+            	<button onclick="changeDiv(1)" type=button name="total_socks">Total Socks Sold</button>
+        	</form>
+        	<div id=1 style="display:none">
+            		<h6>{{ socks }}</h6>
+            </div>
+        	<form method="POST"> 
+        		{% csrf_token %} 
+                <button onclick="changeDiv(2)" type=button name="total_socks_charity">Total Socks Sold By Charity</button>
+        	</form>
+        	<div id=2 style="display:none">
+            		<h6>{{ charity1 }}</h6>
+            		<h6>{{ charity2 }}</h6>
+            </div>
+        	<form method="POST"> 
+        		{% csrf_token %} 
+                <button onclick="changeDiv(3)" type=button name="total_socks_large">Total Large Socks Sold</button>
+        	</form>
+        	<div id=3 style="display:none">
+            		<h6>{{ large_socks }}</h6>
+            </div>
+        	<script>
+				function changeDiv(x)
+				{
+    				for(i=1;i<4;i++)
+    				{
+        				document.getElementById(i).style.display = 'none'; // hide body div tag
+    				}
+    				document.getElementById(x).style.display = 'block'; // show body1 div tag
+				}
+			</script>
+		</body>
+	</html> 
+
+{%endblock%}
