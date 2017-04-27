@@ -87,7 +87,6 @@ def admin_shell(request):
 		building = user_data.values_list("building_name", flat=True)
 		room = user_data.values_list("room_number", flat=True)
 
-
 		info = [("First Name: " + str(firstname[0])), 
 			("Last Name: " + str(lastname[0])),
 			("First Name: " + str(email[0])), 
@@ -100,6 +99,17 @@ def admin_shell(request):
 			("Room #: " + str(room[0]))]
 
 		return render(request, "admin_user_results.html", {'info':info}) 
+
+	if request.method == 'POST' and 'add_charity_button' in request.POST:
+		
+		user_input = request.POST.get('add_charity', None)
+		new_charity = Charity()
+		new_charity.charity_name = user_input
+		new_charity.save()
+		info_raw = Charity.objects.filter(charity_name = user_input)
+		info = info_raw.values_list("charity_name", flat=True)
+
+		return render(request, "admin_new_charity.html", {'info':info[0]})
 	
 	if request.method == 'GET':
 
@@ -108,13 +118,24 @@ def admin_shell(request):
 
 		#Get total socks by charity
 		charities = Charity.objects.all()
-		charities_list = charities.values_list("charity_name", flat=True)
-		charity1_orders = Order.objects.filter(charity_id_id = 1).count()
-		charity2_orders = Order.objects.filter(charity_id_id = 2).count()
-		charity1 = charities_list[0]
-		charity2 = charities_list[1]
-		charity1 += ": " + str(charity1_orders)
-		charity2 += ": " + str(charity2_orders)
+		charity_size = Charity.objects.all().count()
+		charities_raw = charities.values_list("charity_name", flat=True)
+		charities_list = []
+
+		for i in range(0,charity_size):
+			charity = charities_raw[i]
+			charity_ids = Charity.objects.filter(charity_name = charity)
+			charity_id_list = charity_ids.values_list("charity_id", flat=True)
+			charity_orders = Order.objects.filter(charity_id_id = charity_id_list[0]).count()
+			charity += ": " + str(charity_orders)
+			charities_list.append(charity)
+
+		#charity1_orders = Order.objects.filter(charity_id_id = 1).count()
+		#charity2_orders = Order.objects.filter(charity_id_id = 2).count()
+		#charity1 = charities_list[0]
+		#charity2 = charities_list[1]
+		#charity1 += ": " + str(charity1_orders)
+		#charity2 += ": " + str(charity2_orders)
 
 		#Get total large socks
 		large_socks2 = Order.objects.filter(sock_id_id = 2).count()
@@ -123,8 +144,8 @@ def admin_shell(request):
 		large_socks = large_socks2 + large_socks4 + large_socks6
 
 		#Get list of orders to be delivered
-		deliveries = Comprehensive.objects.filter(delivery_id = 1)
-		size = Comprehensive.objects.filter(delivery_id = 1).count()
+		deliveries = Comprehensive.objects.filter(delivery_id = 2)
+		size = Comprehensive.objects.filter(delivery_id = 2).count()
 		firstname_list = deliveries.values_list("first_name", flat=True)
 		lastname_list = deliveries.values_list("last_name", flat=True)
 		sock_list = deliveries.values_list("sock_id", flat=True)
@@ -143,18 +164,17 @@ def admin_shell(request):
 			result = str(firstname) + " " + str(lastname) + ", " + str(sock) + ", " + str(building) + ",  " + str(room)
 			deliveries_list.append(result)
 
-		#Get user info by email address
-
-		#Add new charity
 		return render(request, 'admin_shell.html', 
 			{'socks':socks, 
-			'charity1':charity1, 
-			'charity2':charity2, 
+			'charities_list':charities_list, 
 			'large_socks':large_socks, 
 			'deliveries_list':deliveries_list})
 
 def admin_user_results(request):
 	return render(request, "admin_user_results.html", {})
+
+def admin_new_charity(request):
+	return render(request, "admin_new_charity.html", {})
 
 	
 	

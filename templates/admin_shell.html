@@ -11,11 +11,11 @@
             	<input type="find_user" name="find_user">
 				<button type="submit_user" name=find_user_button>Find User</button>
             </form>
-            <form>
+            <form method="POST">
             	{% csrf_token %} 
             	<br><font size="4">Enter a charity's name to add it to the charity list:</font><br>
 				<input type="add_charity" name="add_charity">
-				<button type="submit_charity">Add New Charity</button>
+				<button type="submit_charity" name=add_charity_button>Add New Charity</button>
             </form>
             <br><font size="4">Select from the following to generate a query:</font><br>
 			<form method="POST"> 
@@ -29,8 +29,9 @@
 				{% csrf_token %} 
         		<button onclick="changeDiv(2)" type=button name="total_socks_charity">Total Socks Sold By Charity</button>
         		<div id=2 style="display:none">
-            		<p>{{ charity1 }}</p>
-            		<p>{{ charity2 }}</p>
+            		{% for c_object in charities_list %}
+            			<p>{{ c_object }}</p>
+        			{% endfor %}
             	</div>
             </form>
            	<form method="POST"> 

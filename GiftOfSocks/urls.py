@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import *
 from django.contrib import admin
-from form.views import user_form, admin_form, user, admin_shell, admin_user_results
+from form.views import user_form, admin_form, user, admin_shell, admin_user_results, admin_new_charity
 admin.autodiscover()
 
 urlpatterns = [
@@ -24,5 +24,6 @@ urlpatterns = [
     url(r'^admin_form/$',admin_form, name='admin_form'),
     url(r'^user/$',user, name='user'),
     url(r'^admin_shell/$',admin_shell, name='admin_shell'),
-    url(r'^admin_user_results/$',admin_user_results, name='admin_user_results')
+    url(r'^admin_user_results/$',admin_user_results, name='admin_user_results'),
+    url(r'^admin_new_charity/$',admin_new_charity, name='admin_new_charity')
 ]
