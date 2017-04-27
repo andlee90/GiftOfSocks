@@ -83,10 +83,30 @@ def user(request):
 	return render(request, "user.html", {'form':form})
 
 def admin_shell(request):
-	if request.method == 'POST' and 'total_socks' in request.POST:
+	#if request.method == 'POST' and 'total_socks' in request.POST:
+	#	socks = Order.objects.count()
+	#	return render(request, 'admin_shell.html', {'socks': socks})
+	#elif request.method == 'POST' and 'total_socks_charity' in request.POST:
+	#	charities = Charity.objects.all()
+	#	charities_list = charities.values_list("charity_name", flat=True)
+	#	charity1_orders = Order.objects.filter(charity_id_id = 1).count()
+	#	charity2_orders = Order.objects.filter(charity_id_id = 2).count()
+	#	charity1 = charities_list[0]
+	#	charity2 = charities_list[1]
+	#	charity1 += ": " + str(charity1_orders)
+	#	return render(request, 'admin_shell.html', {'charity1': charity1, 'charity2': charity2})
+	#elif request.method == 'POST' and 'total_socks_large' in request.POST:
+	#	large_socks2 = Order.objects.filter(sock_id_id = 2).count()
+	#	large_socks4 = Order.objects.filter(sock_id_id = 4).count()
+	#	large_socks6 = Order.objects.filter(sock_id_id = 6).count()
+	#	large_socks = large_socks2 + large_socks4 + large_socks6
+	#	return render(request, 'admin_shell.html', {'large_socks': large_socks})
+	if request.method == 'GET':
+
+		#Get total socks
 		socks = Order.objects.count()
-		return render(request, 'admin_shell.html', {'socks': socks})
-	elif request.method == 'POST' and 'total_socks_charity' in request.POST:
+
+		#Get total socks by charity
 		charities = Charity.objects.all()
 		charities_list = charities.values_list("charity_name", flat=True)
 		charity1_orders = Order.objects.filter(charity_id_id = 1).count()
@@ -95,13 +115,44 @@ def admin_shell(request):
 		charity2 = charities_list[1]
 		charity1 += ": " + str(charity1_orders)
 		charity2 += ": " + str(charity2_orders)
-		return render(request, 'admin_shell.html', {'charity1': charity1, 'charity2': charity2})
-	elif request.method == 'POST' and 'total_socks_large' in request.POST:
+
+		#Get total large socks
 		large_socks2 = Order.objects.filter(sock_id_id = 2).count()
 		large_socks4 = Order.objects.filter(sock_id_id = 4).count()
 		large_socks6 = Order.objects.filter(sock_id_id = 6).count()
 		large_socks = large_socks2 + large_socks4 + large_socks6
-		return render(request, 'admin_shell.html', {'large_socks': large_socks})
+
+		#Get list of orders to be delivered
+		deliveries = Comprehensive.objects.filter(delivery_id = 1)
+		size = Comprehensive.objects.filter(delivery_id = 1).count()
+		firstname_list = deliveries.values_list("first_name", flat=True)
+		lastname_list = deliveries.values_list("last_name", flat=True)
+		sock_list = deliveries.values_list("sock_id", flat=True)
+		building_list = deliveries.values_list("building_name", flat=True)
+		room_list = deliveries.values_list("room_number", flat=True)
+		deliveries_list = []
+		for i in range(0,size):
+			firstname = firstname_list[i]
+			lastname = lastname_list[i]
+			sock_id = sock_list[i]
+			sock_obj = Sock.objects.filter(sock_id = sock_id)
+			sock_type = sock_obj.values_list("sock_type", flat=True)
+			sock = sock_type[0]
+			building = building_list[i]
+			room = room_list[i]
+			result = str(firstname) + " " + str(lastname) + ", " + str(sock) + ", " + str(building) + ",  " + str(room)
+			deliveries_list.append(result)
+
+		#Get user info by email address
+
+		#Add new charity
+		return render(request, 'admin_shell.html', 
+			{'socks':socks, 
+			'charity1':charity1, 
+			'charity2':charity2, 
+			'large_socks':large_socks, 
+			'deliveries_list':deliveries_list})
+	
 	
 
 
