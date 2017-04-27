@@ -1,3 +1,4 @@
+<!--HTML for user form-->
 {% extends "base.html" %}
 
 {%block content %}
@@ -11,7 +12,7 @@
         			<form method="POST"> 
             			{% csrf_token %} 
             			{{ form.as_p }}
-            			<input type="submit" value="submit">
+            			<input type="submit" value="submit" name="submit">
         			</form>
     			</tr>
 			</div>
