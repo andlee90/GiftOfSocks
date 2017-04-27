@@ -48,6 +48,7 @@ class Order(models.Model):
 	charity_id = models.ForeignKey('charity')
 	delivery_id = models.ForeignKey('delivery')
 
+#Updates charity form choices
 def get_charity_choices():
 	if Charity.objects.all().exists() == True:
 		charity_choices = Charity.objects.values_list('charity_id', 'charity_name')
@@ -69,4 +70,4 @@ class Comprehensive(models.Model):
 	delivery_id = models.IntegerField(choices= choices4, default=0, verbose_name='Delivery Option')
 	building_name = models.CharField(max_length=30,null=True, blank=True)
 	room_number = models.CharField(max_length=3,null=True, blank=True)
-
+	

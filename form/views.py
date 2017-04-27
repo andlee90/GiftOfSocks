@@ -1,17 +1,13 @@
-from django.shortcuts import render, redirect
+import sys, os
+
+from django.shortcuts import render, redirect, HttpResponseRedirect
 from django import forms
 from .forms import OrderForm
 from .models import *
 
-def user_form(request):
-	return render(request, 'user_form.html')
-
-def admin_form(request):
-	return render(request, 'admin_form.html')
-
-#Working user form
+#User form
 def user(request):
-	if request.POST:	
+	if request.method == 'POST' and 'submit' in request.POST:	
 		form = OrderForm(request.POST)
 		buyer = Buyer()
 		buyerRole = BuyerRole()
@@ -53,12 +49,16 @@ def user(request):
 				order.save()
 				form.save()
 			form = OrderForm()
-			return render(request, "user.html", {'form':form})
+			#Prevent duplicate data submission
+			return HttpResponseRedirect('/user/')
 	else:
 		form = OrderForm()
 	return render(request, "user.html", {'form':form})
 
+#Admin form
 def admin_shell(request):
+
+	#Handles searching for a user by email address
 	if request.method == 'POST' and 'find_user_button' in request.POST:
 		
 		user_input = request.POST.get('find_user', None)
@@ -100,6 +100,7 @@ def admin_shell(request):
 
 		return render(request, "admin_user_results.html", {'info':info}) 
 
+	#Handles adding a new charity
 	if request.method == 'POST' and 'add_charity_button' in request.POST:
 		
 		user_input = request.POST.get('add_charity', None)
@@ -109,8 +110,12 @@ def admin_shell(request):
 		info_raw = Charity.objects.filter(charity_name = user_input)
 		info = info_raw.values_list("charity_name", flat=True)
 
+		#Refresh Server
+		os.system("touch ~/GiftOfSocks/GiftOfSocks/wsgi.py")
+
 		return render(request, "admin_new_charity.html", {'info':info[0]})
 	
+	#Handles recovering data for all button-only based queries
 	if request.method == 'GET':
 
 		#Get total socks
@@ -129,13 +134,6 @@ def admin_shell(request):
 			charity_orders = Order.objects.filter(charity_id_id = charity_id_list[0]).count()
 			charity += ": " + str(charity_orders)
 			charities_list.append(charity)
-
-		#charity1_orders = Order.objects.filter(charity_id_id = 1).count()
-		#charity2_orders = Order.objects.filter(charity_id_id = 2).count()
-		#charity1 = charities_list[0]
-		#charity2 = charities_list[1]
-		#charity1 += ": " + str(charity1_orders)
-		#charity2 += ": " + str(charity2_orders)
 
 		#Get total large socks
 		large_socks2 = Order.objects.filter(sock_id_id = 2).count()
@@ -170,9 +168,11 @@ def admin_shell(request):
 			'large_socks':large_socks, 
 			'deliveries_list':deliveries_list})
 
+#Page for displaying a user's form submission
 def admin_user_results(request):
 	return render(request, "admin_user_results.html", {})
 
+#Page for displaying the name of the charity that was added
 def admin_new_charity(request):
 	return render(request, "admin_new_charity.html", {})
 
