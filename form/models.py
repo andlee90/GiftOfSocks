@@ -47,8 +47,14 @@ class Order(models.Model):
 	sock_id = models.ForeignKey('sock')
 	charity_id = models.ForeignKey('charity')
 	delivery_id = models.ForeignKey('delivery')
-	
-#comprehsnive fall back option if we cant get formset to work
+
+def get_charity_choices():
+	if Charity.objects.all().exists() == True:
+		charity_choices = Charity.objects.values_list('charity_id', 'charity_name')
+	else:
+		charity_choices = choices3
+	return charity_choices
+
 class Comprehensive(models.Model):
 	order_id = models.AutoField('Order')
 	order_id.primary_key = True
@@ -58,7 +64,7 @@ class Comprehensive(models.Model):
 	phone_regex = RegexValidator(regex=r'^\+?1?\d{10,10}$', message="Phone number must be entered in the format: '+999999999'. 10 digits allowed.")
 	phone_number = models.CharField(validators=[phone_regex], blank=True, max_length=10) # validators should be a list
 	sock_id = models.IntegerField(choices= choices, default=0, verbose_name='Sock Choice')
-	charity_id = models.IntegerField(choices= choices3, default=0, verbose_name='Charity')
+	charity_id = models.IntegerField(choices= get_charity_choices() , default=0, verbose_name='Charity')
 	role_id = models.IntegerField(choices= choices2, default=0, verbose_name='Role')
 	delivery_id = models.IntegerField(choices= choices4, default=0, verbose_name='Delivery Option')
 	building_name = models.CharField(max_length=30,null=True, blank=True)

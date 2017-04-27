@@ -9,31 +9,7 @@ def user_form(request):
 def admin_form(request):
 	return render(request, 'admin_form.html')
 
-#def user(request):
-#	if request.method == "POST":
-#		form = BuyerForm(request.POST)
-#		if form.is_valid():
-#			model_instance = form.save(commit=False)
-#			model_instance.save()
-#			return redirect('user.html')
-#	else:
-#		form = BuyerForm()
-#	return render(request, "user.html", {'form':form})
-
-#Working comprehensive table view/db interaction
-#def user(request):
-#	if request.POST:		
-#		form = OrderTestForm(request.POST)
-#		if form.is_valid():
-#			form.save(commit=False)
-#			form.save()
-#			form = OrderTestForm()
-#			return render(request, "user.html", {'form':form})
-#	else:
-#		form = OrderTestForm()
-#	return render(request, "user.html", {'form':form})
-
-#Testing saving data to other models for our DB design
+#Working user form
 def user(request):
 	if request.POST:	
 		form = OrderForm(request.POST)

@@ -2,7 +2,7 @@ from django import forms
 from GiftOfSocks.choices import *
 from .models import Comprehensive
 
-# Test class for Demo. Should delete once table is dropped
+# Form for user interactions
 class OrderForm(forms.ModelForm):
 
 	class Meta:
