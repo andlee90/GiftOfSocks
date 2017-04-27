@@ -83,24 +83,48 @@ def user(request):
 	return render(request, "user.html", {'form':form})
 
 def admin_shell(request):
-	#if request.method == 'POST' and 'total_socks' in request.POST:
-	#	socks = Order.objects.count()
-	#	return render(request, 'admin_shell.html', {'socks': socks})
-	#elif request.method == 'POST' and 'total_socks_charity' in request.POST:
-	#	charities = Charity.objects.all()
-	#	charities_list = charities.values_list("charity_name", flat=True)
-	#	charity1_orders = Order.objects.filter(charity_id_id = 1).count()
-	#	charity2_orders = Order.objects.filter(charity_id_id = 2).count()
-	#	charity1 = charities_list[0]
-	#	charity2 = charities_list[1]
-	#	charity1 += ": " + str(charity1_orders)
-	#	return render(request, 'admin_shell.html', {'charity1': charity1, 'charity2': charity2})
-	#elif request.method == 'POST' and 'total_socks_large' in request.POST:
-	#	large_socks2 = Order.objects.filter(sock_id_id = 2).count()
-	#	large_socks4 = Order.objects.filter(sock_id_id = 4).count()
-	#	large_socks6 = Order.objects.filter(sock_id_id = 6).count()
-	#	large_socks = large_socks2 + large_socks4 + large_socks6
-	#	return render(request, 'admin_shell.html', {'large_socks': large_socks})
+	if request.method == 'POST' and 'find_user_button' in request.POST:
+		
+		user_input = request.POST.get('find_user', None)
+		user_data = Comprehensive.objects.filter(email=user_input)
+		firstname = user_data.values_list("first_name", flat=True)
+		lastname = user_data.values_list("last_name", flat=True)
+		email = user_data.values_list("email", flat=True)
+		phone = user_data.values_list("phone_number", flat=True)
+
+		sock_id = user_data.values_list("sock_id", flat=True)
+		sock_obj = Sock.objects.filter(sock_id = sock_id)
+		sock = sock_obj.values_list("sock_type", flat=True)
+
+		charity_id = user_data.values_list("charity_id", flat=True)
+		charity_obj = Charity.objects.filter(charity_id = charity_id)
+		charity = charity_obj.values_list("charity_name", flat=True)
+
+		role_id = user_data.values_list("role_id", flat=True)
+		role_obj = Role.objects.filter(role_id = role_id)
+		role = role_obj.values_list("role_name", flat=True)
+
+		delivery_id = user_data.values_list("delivery_id", flat=True)
+		delivery_obj = Delivery.objects.filter(delivery_id = delivery_id)
+		delivery = delivery_obj.values_list("delivery_option", flat=True)
+
+		building = user_data.values_list("building_name", flat=True)
+		room = user_data.values_list("room_number", flat=True)
+
+
+		info = [("First Name: " + str(firstname[0])), 
+			("Last Name: " + str(lastname[0])),
+			("First Name: " + str(email[0])), 
+			("Phone Number: " + str(phone[0])),
+			("Sock Choice: " + str(sock[0])), 
+			("Charity Choice: " + str(charity[0])), 
+			("Role Choice: " + str(role[0])), 
+			("Delivery Choice: " + str(delivery[0])),  
+			("Building: " + str(building[0])),
+			("Room #: " + str(room[0]))]
+
+		return render(request, "admin_user_results.html", {'info':info}) 
+	
 	if request.method == 'GET':
 
 		#Get total socks
@@ -152,6 +176,10 @@ def admin_shell(request):
 			'charity2':charity2, 
 			'large_socks':large_socks, 
 			'deliveries_list':deliveries_list})
+
+def admin_user_results(request):
+	return render(request, "admin_user_results.html", {})
+
 	
 	
 

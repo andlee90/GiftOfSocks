@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{%block content %}
+
+{% csrf_token %} 
+
+<html>
+	<body>
+		<img src="/static/media/esu_logo_header.png" alt="ESU Logo" /><br><br>
+			<form>
+				<p> User Data: </p>
+				{% for i_object in info %}
+            			<p>{{ i_object }}</p>
+        			{% endfor %}
+			</form> 
+		</body>
+	</html> 
+{%endblock%}
